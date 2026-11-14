@@ -62,7 +62,7 @@ jobs:
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "Pacific time: $now (day $dow), mode: ${mode:-normal check}"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: steps.mode.outputs.mode != 'skip'
 
       - name: Run watcher
@@ -80,6 +80,7 @@ jobs:
       - name: Save state
         if: steps.mode.outputs.mode != 'skip'
         run: |
+          [ -f state.json ] || { echo "No state to save (test email run)."; exit 0; }
           git config user.name "sharon-watcher-bot"
           git config user.email "actions@github.com"
           git add state.json
